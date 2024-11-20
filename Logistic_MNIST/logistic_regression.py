@@ -234,6 +234,9 @@ def train(nepochs, model, loss_function, training_loader, validation_loader, opt
 
     return train_loss, train_acc, valid_loss, valid_acc
 
+training=train(10, model, loss_function, training_loader, validation_loader, opt, metrics=accuracy)
+print(training)
+
 # **18. Testing the Model**
 
 def prediction(images, model):
