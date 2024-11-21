@@ -212,30 +212,76 @@ def evaluate(model, loss_function, validation_loader, metrics=accuracy):
 
 # **17. Full Training Function**
 
-def train(nepochs, model, loss_function, training_loader, validation_loader, opt, metrics=accuracy):
+# Importing necessary libraries for plotting
+import matplotlib.pyplot as plt
+
+# **17. Full Training Function with Plotting**
+
+def train_and_plot(nepochs, model, loss_function, training_loader, validation_loader, opt, metrics=accuracy):
     """
-    Trains the model for a given number of epochs.
+    Trains the model for a given number of epochs and plots loss/accuracy.
     """
+    # Initialize lists to store metrics for plotting
+    train_losses, valid_losses = [], []
+    train_accuracies, valid_accuracies = [], []
+
     for epoch in range(nepochs):
+        # Training phase
         model.train()
         for images, labels in training_loader:
             images, labels = images.to(device), labels.to(device)
             train_loss, _, train_acc = loss_batch(model, loss_function, images, labels, opt, metrics=accuracy)
-
-        # Evaluate the model on the validation set
+        
+        # Validation phase
         model.eval()
         valid_loss, _, valid_acc = evaluate(model, loss_function, validation_loader, metrics=accuracy)
-
-        # Print the training and validation metrics for each epoch
-        print(f"Epoch: {epoch+1}/{nepochs}")
+        
+        # Store metrics for the current epoch
+        train_losses.append(train_loss)
+        valid_losses.append(valid_loss)
+        train_accuracies.append(train_acc)
+        valid_accuracies.append(valid_acc)
+        
+        # Print metrics for the epoch
+        print(f"Epoch {epoch+1}/{nepochs}")
         print(f"Training loss: {train_loss:.4f}, Validation loss: {valid_loss:.4f}")
         print(f"Training accuracy: {train_acc:.2f}%, Validation accuracy: {valid_acc:.2f}%")
         print("---------------------------------------------------------")
 
-    return train_loss, train_acc, valid_loss, valid_acc
+    # Plot training and validation metrics
+    epochs = range(1, nepochs + 1)
 
-training=train(10, model, loss_function, training_loader, validation_loader, opt, metrics=accuracy)
-print(training)
+    # Plot losses
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs, train_losses, 'o-', label='Training Loss', color='tab:blue')
+    plt.plot(epochs, valid_losses, 'o--', label='Validation Loss', color='tab:red')
+    plt.title('Training and Validation Loss', fontsize=16, fontweight='bold')
+    plt.xlabel('Epochs', fontsize=12)
+    plt.ylabel('Loss', fontsize=12)
+    plt.legend(fontsize=10)
+    plt.grid(color='gray', linestyle='--', linewidth=0.5)
+
+    # Plot accuracies
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs, train_accuracies, 'o-', label='Training Accuracy', color='tab:green')
+    plt.plot(epochs, valid_accuracies, 'o--', label='Validation Accuracy', color='tab:orange')
+    plt.title('Training and Validation Accuracy', fontsize=16, fontweight='bold')
+    plt.xlabel('Epochs', fontsize=12)
+    plt.ylabel('Accuracy (%)', fontsize=12)
+    plt.legend(fontsize=10)
+    plt.grid(color='gray', linestyle='--', linewidth=0.5)
+
+    plt.tight_layout()
+    plt.show()
+
+    return train_losses, train_accuracies, valid_losses, valid_accuracies
+
+# Train the model and generate the plots
+train_losses, train_accuracies, valid_losses, valid_accuracies = train_and_plot(
+    10, model, loss_function, training_loader, validation_loader, opt, metrics=accuracy
+)
+
 
 # **18. Testing the Model**
 
