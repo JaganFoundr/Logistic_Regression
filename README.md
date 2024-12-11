@@ -134,8 +134,8 @@ If you have any ideas or spot bugs, please **open an issue** in the Issues secti
 
 Stay updated with my latest work and projects! Connect with me on LinkedIn and GitHub:
 
-- LinkedIn: [Your LinkedIn Profile Link] 🔗
-- GitHub: [Your GitHub Profile Link] 🔗
+- LinkedIn: [www.linkedin.com/in/jagannath-harindranath-492a71238] 🔗
+- GitHub: [https://github.com/JaganFoundr] 🔗
 
 ---
 
